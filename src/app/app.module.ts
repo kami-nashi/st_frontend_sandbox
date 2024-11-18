@@ -11,6 +11,7 @@ import { SignupComponent } from './signup/signup.component';
 import { LoginComponent } from './login/login.component';
 import { AboutComponent } from './about/about.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { Chart } from 'chart.js';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
