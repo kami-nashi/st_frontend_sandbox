@@ -6,12 +6,57 @@ import {Chart, registerables} from 'chart.js/auto';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
+
 export class DashboardComponent {
   title = 'angular-chart';
   constructor() {
     Chart.register(...registerables);
   }
+
   ngOnInit(): void {
+
+    // Doughnuts
+    var url = 'https://kami-nashi.com/st_test_data/dashboard_maint.php';
+
+    function getJSON(url){
+      
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.responseType = 'json';
+      xhr.onload = function() {
+      var status = xhr.status;
+      if (status === 200) {
+        console.log('200,', xhr.response);
+      } else {
+        console.log('failure, ', xhr.response);
+      }
+    };
+    xhr.send();
+    return xhr.response;
+    };
+
+    const dnCanvasEle: any = document.getElementById('dn_chart')
+    console.log("this should be the json array, ", getJSON(url))
+
+    
+    const dnChar = new Chart(dnCanvasEle.getContext('2d'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Orders','Sales'],
+        datasets: [
+          { 
+            data: [7.75,13.25], 
+            //data: getJSON,
+            backgroundColor: ['rgba(75, 192, 192, 0.2)','rgba(54, 162, 235, 0.2)'],
+            borderColor: ['rgb(75, 192, 192)','rgb(54, 162, 235)']
+
+          },
+        ]
+      },
+      options: {
+      }
+    });
+
     // Line Chart
     const lineCanvasEle: any = document.getElementById('line_chart')
     const lineChar = new Chart(lineCanvasEle.getContext('2d'), {
@@ -32,6 +77,7 @@ export class DashboardComponent {
           }
         }
       });
+
     // Bar chart
     const barCanvasEle: any = document.getElementById('bar_chart')
     const barChart = new Chart(barCanvasEle.getContext('2d'), {
