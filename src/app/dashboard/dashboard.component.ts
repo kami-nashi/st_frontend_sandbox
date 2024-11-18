@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
+import DoughnutLabel from '@mauro.panzeri/chartjs-plugin-doughnutlabel';
 import {Chart, registerables} from 'chart.js/auto';
-import { data } from 'jquery';
 
 @Component({
   selector: 'app-dashboard',
@@ -40,7 +40,7 @@ export class DashboardComponent {
     const dnChar = new Chart(dnCanvasEle.getContext('2d'), {
       type: 'doughnut',
       data: {
-        labels: ['Orders','Sales'],
+        labels: ["Current Hours","Remaining Hours"],
         datasets: [
           { 
             //data: [7.75,13.25], 
@@ -53,8 +53,51 @@ export class DashboardComponent {
       },
       options: {
         responsive: true,
-        
-      }
+      },
+      plugins: [],
+    });
+
+    // Costs Doughnuts
+    var costs_url = 'https://kami-nashi.com/st_test_data/dashboard_costs.php';
+    var costs_data = getDATA(costs_url)
+    console.log(costs_data)
+
+    const dnCanvasEleCosts: any = document.getElementById('dn_costs')
+    const dnCosts = new Chart(dnCanvasEleCosts.getContext('2d'), {
+      type: 'doughnut',
+      data: {
+        datasets: [
+          {
+            //coach time vs ice time
+            backgroundColor: ["#3d86e8", "#d816e0"],
+            data: [costs_data[0], costs_data[1]],
+            label: 'Practice & Coach Costs',
+            //labels: [ "Coaching Cost","Ice Time Cost"],
+          }, {
+            //equipment vs maintenance
+            backgroundColor: ["#70db70", "#009900"],
+            data: [costs_data[2], costs_data[3]],
+            label: 'Costs of equipment and maintaining it',
+            //labels: ["Equipment Cost","Maintenance Cost"],
+          }, {
+            //comp vs Performance vs tests vs membership
+            backgroundColor: ["#ff7c43","#ffa55b","#febd72","#ffa00e"],
+            data: [costs_data[4], costs_data[5], costs_data[6], costs_data[7]],
+            label: 'Costs of fees associated with events',
+            //labels: ["Competition Fees","Performance Fees", "Test Fees", "Membership Fees"],
+          }, {
+            //class fees vs camp fees
+            backgroundColor: ["#00e0ff", "#0080a6"],
+            data: [costs_data[8], costs_data[9]],
+            label: 'Costs of group learning',
+            //labels: ["Class Fees","Camp Fees"],
+          },
+        ]
+      },
+      options: {
+        responsive: true,
+      },
+      plugins: [],
     });
 
     // Line Chart
