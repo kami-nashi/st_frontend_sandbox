@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {Chart, registerables} from 'chart.js/auto';
+import { data } from 'jquery';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,37 +17,34 @@ export class DashboardComponent {
   ngOnInit(): void {
 
     // Doughnuts
-    var url = 'https://kami-nashi.com/st_test_data/dashboard_maint.php';
+    var dn_url = 'https://kami-nashi.com/st_test_data/dashboard_maint.php';
 
-    function getJSON(url){
-      
+    function getDATA(chart_url) {
       var xhr = new XMLHttpRequest();
-      xhr.open('GET', url, true);
-      xhr.responseType = 'json';
-      xhr.onload = function() {
-      var status = xhr.status;
-      if (status === 200) {
-        console.log('200,', xhr.response);
-      } else {
-        console.log('failure, ', xhr.response);
-      }
-    };
-    xhr.send();
-    return xhr.response;
-    };
+      xhr.open("GET", chart_url, false);
+      xhr.send();
+  
+      // stop the engine while xhr isn't done
+      for(; xhr.readyState !== 4;)
+  
+      if (xhr.status === 200) {  
+          console.log('SUCCESS', xhr.responseText);}
+  
+      return JSON.parse(xhr.responseText);
+  }
+
+  var dn_data = getDATA(dn_url)
+  console.log(dn_data)
 
     const dnCanvasEle: any = document.getElementById('dn_chart')
-    console.log("this should be the json array, ", getJSON(url))
-
-    
     const dnChar = new Chart(dnCanvasEle.getContext('2d'), {
       type: 'doughnut',
       data: {
         labels: ['Orders','Sales'],
         datasets: [
           { 
-            data: [7.75,13.25], 
-            //data: getJSON,
+            //data: [7.75,13.25], 
+            data: [dn_data[0], dn_data[1]],
             backgroundColor: ['rgba(75, 192, 192, 0.2)','rgba(54, 162, 235, 0.2)'],
             borderColor: ['rgb(75, 192, 192)','rgb(54, 162, 235)']
 
@@ -54,6 +52,8 @@ export class DashboardComponent {
         ]
       },
       options: {
+        responsive: true,
+        
       }
     });
 
