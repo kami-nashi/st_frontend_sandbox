@@ -40,13 +40,14 @@ export class DashboardComponent {
     const dnChar = new Chart(dnCanvasEle.getContext('2d'), {
       type: 'doughnut',
       data: {
-        labels: ["Current Hours","Remaining Hours"],
+        //labels: ["Current Hours","Remaining Hours"],
         datasets: [
           { 
             //data: [7.75,13.25], 
             data: [dn_data[0], dn_data[1]],
-            backgroundColor: ['rgba(75, 192, 192, 0.2)','rgba(54, 162, 235, 0.2)'],
-            borderColor: ['rgb(75, 192, 192)','rgb(54, 162, 235)']
+            backgroundColor: ["#009900","#70db70"],
+            //backgroundColor: ['rgba(75, 192, 192, 0.2)','rgba(54, 162, 235, 0.2)'],
+            //borderColor: ['rgb(75, 192, 192)','rgb(54, 162, 235)']
 
           },
         ]
@@ -99,6 +100,39 @@ export class DashboardComponent {
       },
       plugins: [],
     });
+
+
+    // Costs Doughnuts
+    var prac_url = 'https://kami-nashi.com/st_test_data/dashboard_prac.php';
+    var prac_data = getDATA(prac_url)
+    console.log(prac_data)
+
+    const dnCanvasElePrac: any = document.getElementById('dn_Prac')
+    const dn_Prac = new Chart(dnCanvasElePrac.getContext('2d'), {
+      type: 'doughnut',
+      data: {
+        datasets: [
+          {
+            //coach time vs ice time
+            backgroundColor: ["#3d86e8", "#d816e0"],
+            data: [prac_data[0], prac_data[1]],
+            label: 'Monthly Overview',
+            //labels: [ "Yearly Practice","Yearly Coached"],
+          }, {
+            //time per month with and without a coach
+            backgroundColor: ["#3d86e8", "#d816e0"],
+            data: [prac_data[2], prac_data[3]],
+            label: 'Yearly Overview',
+            //labels: ["Monthly Practice","Monthly Coached"],
+          },
+        ]
+      },
+      options: {
+        responsive: true,
+      },
+      plugins: [],
+    });
+
 
     // Line Chart
     const lineCanvasEle: any = document.getElementById('line_chart')
